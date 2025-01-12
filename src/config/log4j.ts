@@ -1,3 +1,4 @@
+// log4js的配置
 import * as log4js from 'log4js'
 import path from 'path'
 import fs from 'fs'

@@ -1,9 +1,8 @@
+// koa的挂载和静态资源开放等
 import koa from 'koa'
 import swaggerDoc from '@/config/swagger'
 import indexRouter from '@/router/index'
 import bodyParser from 'koa-bodyparser'
-
-
 import path from 'path'
 
 import staticFiles from 'koa-static'
