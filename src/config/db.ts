@@ -2,9 +2,6 @@ import { Sequelize } from 'sequelize-typescript'
 import User from '@/schema/user'
 import {env} from '@/main'
 
-console.log('env')
-console.log(env)
-
 //实例化对象
 // @ts-ignore
 const seq = new Sequelize(env.DATABASE_NAME, env.USER_NAME, env.DATABASE_PASSWORD, {
@@ -27,4 +24,3 @@ const seq = new Sequelize(env.DATABASE_NAME, env.USER_NAME, env.DATABASE_PASSWOR
 })()
 
 export default seq
-

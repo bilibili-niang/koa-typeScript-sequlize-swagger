@@ -7,7 +7,6 @@
 
 #### 使用
 
-> github clone
 ```shell
 git clone https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger.git
 ```
@@ -112,16 +111,87 @@ DATABASE_PORT=3306
 DATABASE_HOST=127.0.0.1
 ```
 
+#### log4js
 
+> [log4js地址](https://github.com/log4js-node/log4js-node)
 
+> 项目中支持将log输出到文件
 
+目前支持的输出等级:
+```ts
+export {
+  trace,
+  debug,
+  info,
+  warn,
+  error,
+  fatal
+}
+```
+具体的配置可以查看:`D:\koa-typeScript-sequlize-swagger\src\config\log4j.ts`,  
+项目启动时,它会创建log文件夹(`D:\koa-typeScript-sequlize-swagger\src\logs`)以及对应的log文件
 
+#### sequlize数据库连接 
 
+> [sequelize-typescript地址](https://github.com/sequelize/sequelize-typescript)
 
+> 很多库支持连接数据库,这里只是其中一种
 
+> 创建数据库连接并初始化Model:  
 
+`D:\koa-typeScript-sequlize-swagger\src\config\db.ts`
+```ts
+import { Sequelize } from 'sequelize-typescript'
+import User from '@/schema/user'
+import {env} from '@/main'
 
+//实例化对象
+const seq = new Sequelize(env.DATABASE_NAME, env.USER_NAME, env.DATABASE_PASSWORD, {
+  dialect: 'mysql',
+  port: Number(env.DATABASE_PORT),
+  logging: true,
+  models: [User]
+})
+// 初始化model
+;(async () => {
+  try {
+    await seq.sync() // 这将会根据模型定义创建或更新表结构
+    console.log('Database & tables created!')
+  } catch (error) {
+    console.error('Unable to connect to the database:', error)
+  }
+})()
 
+export default seq
+```
+> 定义一张表:
 
+`D:\koa-typeScript-sequlize-swagger\src\schema\user\index.ts`:
+```ts
+import { Column, DataType, Length, Table } from 'sequelize-typescript'
+import BaseModel from '@/schema/baseModal'
 
+@Table({ tableName: 'user' })
+export default class User extends BaseModel {
+  @Length({
+    min: 2,
+    max: 10,
+    msg: 'userName must between 2 to 10 characters'
+  })
+  @Column({
+    type: DataType.STRING,
+    comment: '用户名称'
+  })
+  userName: string
+  @Column({
+    type: DataType.STRING,
+    comment: '密码'
+  })
+  password: string
+}
+```
+
+---
+
+后续会有更新,文档更新较慢
 

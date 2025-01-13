@@ -1,5 +1,4 @@
-import { Column, DataType, HasMany, Model, IsEmail, Length, Table, Unique } from 'sequelize-typescript'
-import seq from '@/config/db'
+import { Column, DataType, Length, Table } from 'sequelize-typescript'
 import BaseModel from '@/schema/baseModal'
 
 @Table({ tableName: 'user' })
