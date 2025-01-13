@@ -1,7 +1,7 @@
-[zh](#appendix),[en](#en)
+[中文](#zh),[English](#en)
 
 ---
-<a  href="#appendix"></a>
+<a  href="#zh"></a>
 
 > [koa-typeScript-sequlize-swagger github地址](https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger),欢迎点点`Star`
 
@@ -201,8 +201,9 @@ export default class User extends BaseModel {
 后续会有更新,文档更新较慢
 
 ---
-
+## 英文介绍 {#en}
 <a  href="#en"></a>
+
 > [koa-typeScript-sequlize-swagger github address](https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger), welcome to click `Star`
 
 > [koa-typeScript-sequlize-swagger npm address (I feel it is not necessary to publish to npm, the download is in node_modules)](https://www.npmjs.com/package/koa-typescript-sequlize-swagger)
