@@ -201,8 +201,7 @@ export default class User extends BaseModel {
 后续会有更新,文档更新较慢
 
 ---
-## 英文介绍 {#en}
-<a  href="#en"></a>
+##### en
 
 > [koa-typeScript-sequlize-swagger github address](https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger), welcome to click `Star`
 
