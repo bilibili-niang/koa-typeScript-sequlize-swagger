@@ -28,15 +28,10 @@ class UserController {
   @body((createUserType as any).swaggerDocument)
   async createUser(ctx, next) {
     const paramType = new createUserType()
-    console.log('paramType------------------')
-    console.log(paramType)
 
     // 获取目标参数
     checkDesign(ctx.request.body, paramType as any)
       .then(({ result: params }) => {
-
-        console.log(params)
-
         ctx.body = ctxBodySpecification({
           success: true,
           msg: '开发测试中'
