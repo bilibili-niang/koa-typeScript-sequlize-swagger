@@ -1,6 +1,6 @@
 {
   "name": "koa-typescript-sequlize-swagger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "repository": "https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger.git",
   "scripts": {
