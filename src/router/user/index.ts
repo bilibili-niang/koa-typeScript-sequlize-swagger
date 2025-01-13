@@ -7,4 +7,6 @@ const router = new Router({
 
 router.get('/userList',UserControllerEle.getUserList)
 
+router.post('/create',UserControllerEle.createUser)
+
 module .exports= router

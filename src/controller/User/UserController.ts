@@ -1,5 +1,7 @@
 import { body, query, request, summary, swaggerClass, swaggerProperty, tags } from 'koa-swagger-decorator'
-import { ctxBodySpecification } from '@/utils'
+import { checkDesign, ctxBodySpecification } from '@/utils'
+import { createUserType } from './type'
+
 
 @swaggerClass()
 class UserController {
@@ -16,10 +18,40 @@ class UserController {
 
     ctx.body = ctxBodySpecification({
       success: true,
-      msg:'开发测试中'
+      msg: '开发测试中'
     })
   }
 
+  @request('post', '/user/create')
+  @tags(['用户', '创建'])
+  @summary('创建用户')
+  @body((createUserType as any).swaggerDocument)
+  async createUser(ctx, next) {
+    const paramType = new createUserType()
+    console.log('paramType------------------')
+    console.log(paramType)
+
+    // 获取目标参数
+    checkDesign(ctx.request.body, paramType as any)
+      .then(({ result: params }) => {
+
+        console.log(params)
+
+        ctx.body = ctxBodySpecification({
+          success: true,
+          msg: '开发测试中'
+        })
+
+      })
+      .catch((err) => {
+        console.log('err:')
+        console.log(err)
+        ctx.body = ctxBodySpecification({
+          success: false,
+          msg: err.message
+        })
+      })
+  }
 }
 
 export default UserController

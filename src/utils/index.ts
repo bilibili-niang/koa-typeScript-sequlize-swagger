@@ -1,1 +1,1 @@
-export { ctxBodySpecification } from './ctxBodySpecification'
+export { ctxBodySpecification, checkDesign } from './ctxBodySpecification'

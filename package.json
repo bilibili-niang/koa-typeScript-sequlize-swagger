@@ -4,7 +4,7 @@
   "main": "index.js",
   "repository": "https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger.git",
   "scripts": {
-    "dev": "nodemon ./src/main.ts",
+    "dev": "dotenv -e .env.development nodemon ./src/main.ts",
     "commit": "git-cz"
   },
   "config": {
@@ -24,6 +24,7 @@
     "@types/koa-static": "^4.0.4",
     "cz-conventional-changelog": "^3.3.0",
     "dotenv": "^16.4.7",
+    "dotenv-cli": "^8.0.0",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.4.1",
     "koa-router": "^10.1.1",
