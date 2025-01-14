@@ -31,6 +31,7 @@ class UserController {
 
     // 获取目标参数
     checkDesign(ctx.request.body, paramType as any)
+
       .then(({ result: params }) => {
         ctx.body = ctxBodySpecification({
           success: true,

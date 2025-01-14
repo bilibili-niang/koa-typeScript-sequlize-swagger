@@ -5,6 +5,8 @@ import indexRouter from '@/router/index'
 import bodyParser from 'koa-bodyparser'
 import path from 'path'
 
+import { validate } from '@/utils'
+
 import staticFiles from 'koa-static'
 
 const app = new koa()
@@ -12,6 +14,8 @@ const app = new koa()
 // 跨域
 app
   .use(bodyParser())
+  // @ts-ignore
+  .use(validate)
   .use(async (ctx, next) => {
     ctx.set('Access-Control-Allow-Origin', '*')
     ctx.set('Access-Control-Allow-Headers', 'Content-Type')
