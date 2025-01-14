@@ -1,5 +1,5 @@
 import { addAliases } from 'module-alias'
-import dotenv from "dotenv"
+import dotenv from 'dotenv'
 
 // 配置路径别名,需要在项目的入口
 addAliases({
@@ -8,7 +8,7 @@ addAliases({
 import app from './app'
 import { info } from '@/config/log4j'
 
-const env=dotenv.config().parsed
+const env = dotenv.config().parsed
 
 app.listen(Number(env.PORT), () => {
   // 清除一下控制台

@@ -1,8 +1,27 @@
-import { Column, DataType, Length, Table } from 'sequelize-typescript'
-import BaseModel from '@/schema/baseModal'
+import { Column, DataType, Table, Model, BeforeCreate, Length } from 'sequelize-typescript'
+import { v4 as uuidv4 } from 'uuid' // 导入用于生成 UUID 的库
+
+// 定义 User 模型的属性接口
+interface UserAttributes {
+  id: string;
+  userName: string;
+  password: string;
+}
+
+// 定义创建 User 时所需的属性接口（可选）
+interface UserCreationAttributes extends Partial<UserAttributes> {
+}
 
 @Table({ tableName: 'user' })
-export default class User extends BaseModel {
+export default class User extends Model<any> {
+  @Column({
+    type: DataType.UUID, // 使用 UUID 类型
+    defaultValue: DataType.UUIDV4, // 默认值为 UUIDv4
+    primaryKey: true, // 设置为主键
+    allowNull: false, // 不允许为空
+  })
+  declare id: string
+
   @Length({
     min: 2,
     max: 10,
@@ -12,52 +31,18 @@ export default class User extends BaseModel {
     type: DataType.STRING,
     comment: '用户名称'
   })
-  userName: string
+  declare userName: string
   @Column({
     type: DataType.STRING,
     comment: '密码'
   })
-  password: string
+  declare password: string
+
+  // 如果您想要确保每次创建新记录时都生成一个新的 UUID，可以使用钩子函数
+  @BeforeCreate
+  static generateUUID(instance: User) {
+    if (!instance.id) {
+      instance.id = uuidv4() // 手动设置 UUID
+    }
+  }
 }
-
-/*
-User.init({
-  id: {
-    type: DataType.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  }
-})*/
-
-/*
-seq.addModels([User])
-
-// 如果你需要显式地调用 init 方法，可以这样做：
-User.init({
-  id: {
-    type: DataType.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    comment: '用户ID'
-  },
-  userName: {
-    type: DataType.STRING,
-    allowNull: false,
-    validate: {
-      len: {
-        args: [2, 10],
-        msg: 'userName must between 2 to 10 characters'
-      }
-    },
-    comment: '用户名称'
-  },
-  password: {
-    type: DataType.STRING,
-    allowNull: false,
-    comment: '密码'
-  }
-}, {
-  sequelize: seq, // 这个模型关联的 Sequelize 实例
-  tableName: 'user', // 表名
-  modelName: 'User' // 模型名
-})*/

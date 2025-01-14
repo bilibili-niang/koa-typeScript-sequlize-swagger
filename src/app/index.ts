@@ -14,6 +14,7 @@ const app = new koa()
 // 跨域
 app
   .use(bodyParser())
+  .use(swaggerDoc.routes())
   // @ts-ignore
   .use(validate)
   .use(async (ctx, next) => {
@@ -25,7 +26,6 @@ app
   //开放html模板的静态目录,你可以把打包后的html文件放到这个目录下
   .use(staticFiles(path.join(__dirname, '../static/views/'), { extensions: ['html'] }))
   .use(indexRouter.routes())
-  .use(swaggerDoc.routes())
   .on('error', (ctx) => {
     ctx.body = {
       code: 500,

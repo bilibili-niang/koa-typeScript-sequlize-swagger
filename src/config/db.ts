@@ -1,18 +1,15 @@
 import { Sequelize } from 'sequelize-typescript'
 import User from '@/schema/user'
-import {env} from '@/main'
+import * as process from 'node:process'
 
 //实例化对象
 // @ts-ignore
-const seq = new Sequelize(env.DATABASE_NAME, env.USER_NAME, env.DATABASE_PASSWORD, {
-  // host: env.DATABASE_HOST,
-  dialect: 'mysql',
-  port: Number(env.DATABASE_PORT),
-  // 设置字符集为utf8mb4
-  // charset: 'utf8mb4',
-  logging: true,
-  models: [User]
-})
+const seq = new Sequelize(process.env.DATABASE_NAME, process.env.USER_NAME, process.env.DATABASE_PASSWORD, {
+    dialect: 'mysql',
+    port: Number(process.env.DATABASE_PORT),
+    logging: true,
+    models: [User]
+  })
 
 ;(async () => {
   try {
