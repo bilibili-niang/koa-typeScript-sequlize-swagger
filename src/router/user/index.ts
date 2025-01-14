@@ -1,3 +1,6 @@
+/*
+* user router
+* */
 import Router from 'koa-router'
 import UserControllerEle from '@/controller/User'
 import { createUserType } from '@/controller/User/type'

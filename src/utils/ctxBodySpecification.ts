@@ -6,8 +6,8 @@ export const ctxBodySpecification = (requestBody: any) => {
   const hopeResult = {
     code: 500,
     msg: '响应失败辣',
-    data: {},
-    success: false
+    success: false,
+    data: {}
   }
   return Object.assign(hopeResult, requestBody)
 }

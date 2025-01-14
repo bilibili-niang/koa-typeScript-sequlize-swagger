@@ -1,5 +1,8 @@
 import { ctxBodySpecification } from '@/utils/ctxBodySpecification'
 import { error } from '@/config/log4j'
+import seq from '@/config/db'
+import { toInteger } from 'lodash'
+seq
 
 /*
 * 工厂函数接收一个包含 swagger 文档的类或对象
@@ -9,10 +12,13 @@ import { error } from '@/config/log4j'
 const createVerificationMiddleware = (swaggerClass: any) => {
   return async (ctx, next) => {
 
+    // 调用此方法即可为接口添加默认分页参数
+    const queryParams = Object.assign({ size: 10, current: 1, pages: 1 }, ctx.request.query)
+
     // 合并请求体和查询参数
     const params = {
       ...ctx.request.body,
-      ...ctx.request.query,
+      queryParams,
     }
 
     // 初始化错误消息数组
@@ -52,6 +58,41 @@ const createVerificationMiddleware = (swaggerClass: any) => {
   }
 }
 
+/*
+* 构建一个分页查询
+* */
+const paginationMiddleware = async (ctx: any, model: any, msg?: string) => {
+  const queryParams = Object.assign({ size: 10, current: 1, page: 1 }, ctx.request.query)
+
+  // 执行分页查询
+  await model.findAndCountAll({
+    limit: toInteger(queryParams.size),
+    offset: toInteger((queryParams.current - 1) * queryParams.size),
+  })
+    .then(res => {
+      console.log(res)
+      ctx.body = ctxBodySpecification({
+        success: true,
+        code: 200,
+        msg: `查询${msg}成功`,
+        data: res
+      })
+    })
+    .catch(e => {
+      ctx.body = ctxBodySpecification({
+        success: false,
+        code: 500,
+        msg: `查询${msg}失败`,
+        data: e
+      })
+    })
+
+}
+
+
 export {
   createVerificationMiddleware,
+  paginationMiddleware
 }
+
+

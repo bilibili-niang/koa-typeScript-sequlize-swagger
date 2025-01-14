@@ -1,16 +1,6 @@
 import { Column, DataType, Table, Model, BeforeCreate, Length } from 'sequelize-typescript'
 import { v4 as uuidv4 } from 'uuid' // 导入用于生成 UUID 的库
 
-// 定义 User 模型的属性接口
-interface UserAttributes {
-  id: string;
-  userName: string;
-  password: string;
-}
-
-// 定义创建 User 时所需的属性接口（可选）
-interface UserCreationAttributes extends Partial<UserAttributes> {
-}
 
 @Table({ tableName: 'user' })
 export default class User extends Model<any> {

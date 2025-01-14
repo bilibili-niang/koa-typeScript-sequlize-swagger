@@ -1,29 +1,25 @@
 import seq from '@/config/db'
 import { body, query, request, summary, swaggerClass, swaggerProperty, tags } from 'koa-swagger-decorator'
-import { ctxBodySpecification } from '@/utils'
+import { ctxBodySpecification, paginationMiddleware } from '@/utils'
 import { createUserType } from './type'
 import User from '@/schema/user'
 
 // 仅仅是为了导入seq
-console.log(seq)
+seq
+
 
 @swaggerClass()
 class UserController {
-
   @request('get', '/user/userList')
   @tags(['用户', '测试'])
   @summary('获取用户列表')
   @query({
+    current: { type: 'number', required: true, description: '当前第几页' },
     page: { type: 'number', required: true, description: '页码' },
-    pageSize: { type: 'number', required: true, description: '每页数量' },
+    size: { type: 'number', required: true, description: '每页数量' },
   })
   async getUserList(ctx: any) {
-    const { page, pageSize } = ctx.query
-
-    ctx.body = ctxBodySpecification({
-      success: true,
-      msg: '开发测试中'
-    })
+    await paginationMiddleware(ctx, User,'查询用户列表')
   }
 
   @request('post', '/user/create')

@@ -12,7 +12,7 @@ const env = dotenv.config().parsed
 
 app.listen(Number(env.PORT), () => {
   // 清除一下控制台
-  process.stdout.write('\x1Bc')
+  // process.stdout.write('\x1Bc')
   info(`Server is running at http://localhost:${env.PORT}`)
   console.log(`Server is running at http://localhost:${env.PORT}`)
   console.log(`swaggerDoc is running at http://localhost:${env.PORT}/swagger-html`)
