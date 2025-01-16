@@ -1,6 +1,6 @@
 {
   "name": "koa-typescript-sequlize-swagger",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "index.js",
   "repository": "https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger.git",
   "scripts": {
@@ -20,7 +20,7 @@
   ],
   "author": "iceStone",
   "license": "MIT",
-  "description": "",
+  "description": "nodejs的后端模板,使用了koa,typescript,koa-swagger-decorator,zod等",
   "dependencies": {
     "@types/koa-static": "^4.0.4",
     "cz-conventional-changelog": "^3.3.0",

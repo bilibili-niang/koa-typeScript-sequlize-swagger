@@ -1,3 +1,3 @@
-export { ctxBodySpecification, checkDesign } from './ctxBodySpecification'
+export { ctxBody, checkDesign } from './ctxBodySpecification'
 export * from './verification'
 export * from './factory'

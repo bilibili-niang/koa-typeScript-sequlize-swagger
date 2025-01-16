@@ -1,11 +1,17 @@
 import { Context } from 'koa'
-import { body, responses, routeConfig } from 'koa-swagger-decorator'
+import { body, middlewares, responses, routeConfig } from 'koa-swagger-decorator'
 import {
   CreateUserReq,
   CreateUserRes,
+  DeleteUserQuery,
+  DeleteUserRes,
+  IDeleteUserQuery,
 } from './type'
 import { ParsedArgs, z } from 'koa-swagger-decorator'
 import { ICreateUserReq, ICreateUserRes } from '@/controller/User/type'
+import User from '@/schema/user'
+import { checkDesign, ctxBody, deleteByIdMiddleware, paginationMiddleware } from '@/utils'
+import { paginationQuery } from '@/controller/common/queryType'
 
 class UserController {
 
@@ -17,11 +23,30 @@ class UserController {
   })
   @body(CreateUserReq)
   @responses(CreateUserRes)
+  @middlewares([
+    async (ctx: Context, next: any) => {
+      // 可以对ctx进行操作,然后放行
+      await next()
+    }
+  ])
   async CreateUser(ctx: Context, args: ParsedArgs<ICreateUserReq>) {
-
-    console.log(args)
-
-    ctx.body = { message: 'create', id: '123' } as ICreateUserRes
+    await User.create(args.body)
+      .then((res: any) => {
+        ctx.body = ctxBody({
+          success: true,
+          code: 200,
+          msg: '创建用户成功',
+          data: res.dataValues
+        })
+      })
+      .catch(e => {
+        ctx.body = ctxBody({
+          success: false,
+          code: 500,
+          msg: '创建用户失败',
+          data: e
+        })
+      })
   }
 
 
@@ -31,20 +56,26 @@ class UserController {
     summary: '用户列表',
     tags: ['用户'],
     request: {
-      query: z.object({
-        size: z.coerce.number().positive().default(10),
-        page: z.coerce.number().positive().default(1),
-        test: z.coerce.number().nullable()
-      })
+      query: paginationQuery()
     }
   })
   @responses(CreateUserRes)
   async getUserList(ctx: Context, args: ParsedArgs<ICreateUserReq>) {
+    await paginationMiddleware(ctx, User, '查询用户列表')
+  }
 
-    console.log('args-------------------------')
-    console.log(args)
-
-    ctx.body = { message: 'create', id: '123' } as ICreateUserRes
+  @routeConfig({
+    method: 'delete',
+    path: '/user/delete',
+    summary: '删除指定用户',
+    tags: ['用户'],
+    request: {
+      query: DeleteUserQuery
+    }
+  })
+  @responses(DeleteUserRes)
+  async deleteUser(ctx: Context, args: ParsedArgs<IDeleteUserQuery>) {
+    await deleteByIdMiddleware(ctx, User, '用户')
   }
 
 }

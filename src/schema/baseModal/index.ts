@@ -1,28 +1,24 @@
+import { v4 as uuidv4 } from 'uuid'
 import {
   Column,
   DataType,
-  HasMany,
   Model,
-  IsEmail,
-  Length,
-  Table,
-  Unique,
   PrimaryKey,
-  AutoIncrement,
   CreatedAt,
   UpdatedAt,
-  DeletedAt
+  DeletedAt,
+  BeforeCreate
 } from 'sequelize-typescript'
-
 
 class BaseModel extends Model {
   @PrimaryKey
-  @AutoIncrement
   @Column({
-    type: DataType.BIGINT,
-    comment: '自增ID'
+    type: DataType.UUID, // 使用 UUID 类型
+    defaultValue: () => uuidv4().replace(/-/g, ''),
+    primaryKey: true, // 设置为主键
+    allowNull: false, // 不允许为空
   })
-  declare id: bigint
+  declare id: string
 
   @CreatedAt
   @Column({

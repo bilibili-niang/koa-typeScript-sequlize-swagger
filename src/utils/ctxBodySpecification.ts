@@ -2,7 +2,7 @@
 /*
 * 强制传入的数据返回指定的格式
 * */
-export const ctxBodySpecification = (requestBody: any) => {
+export const ctxBody = (requestBody: any) => {
   const hopeResult = {
     code: 500,
     msg: '响应失败辣',

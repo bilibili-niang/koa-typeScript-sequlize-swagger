@@ -1,12 +1,12 @@
 // koa的挂载和静态资源开放等
 import koa from 'koa'
-import { router } from '@/router/index'
+import indexRouter from '@/router/index'
 import koaBody from 'koa-body'
 import path from 'path'
 import onError from 'koa-onerror'
 import staticFiles from 'koa-static'
 import { error, trace } from '@/config/log4j'
-import { ctxBodySpecification, validate } from '@/utils'
+import { ctxBody } from '@/utils'
 
 
 const app = new koa()
@@ -15,28 +15,17 @@ const app = new koa()
 onError(app, {
   json: function (err, ctx) {
     ctx.status = 500
-    ctx.body = ctxBodySpecification({ msg: err.message })
-  },
-  html: function (err, ctx) {
-    ctx.status = 500
-    ctx.body = `<body>${err}</body>`
+    ctx.body = ctxBody({ msg: err.message })
   }
 })
-
-
-/*app.context.onerror = (e)=>{
-  console.log(e)
-}*/
-
 
 // 跨域
 // @ts-ignore
 app
   .on('error', async (err, ctx, next) => {
-    // ctx.set('Content-Type', 'text/json')
     ctx.status = 500
 
-    ctx.body = ctxBodySpecification({ data: err.errors[0] })
+    ctx.body = ctxBody({ data: err.errors[0] })
 
     console.log(err.errors[0])
 
@@ -58,19 +47,17 @@ app
   }))
   //开放html模板的静态目录,你可以把打包后的html文件放到这个目录下
   .use(staticFiles(path.join(__dirname, '../static/views/'), { extensions: ['html'] }))
-  .use(router.routes())
+  .use(indexRouter.routes())
   // .use(validate)
   .on('error', async (err, ctx, next) => {
     ctx.status = 500
     ctx.body = err
-    // console.log('错误的ctx---------------------------')
-    // console.log(err)
     error('响应错误,' + JSON.stringify(err))
   })
   .use((ctx, next) => {
     console.log('最后的ctx')
     trace('未知url' + ctx.request.url)
-    ctx.body = ctxBodySpecification({
+    ctx.body = ctxBody({
       code: 500,
       msg: `这里是无人之境`,
     })

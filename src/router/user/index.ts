@@ -1,23 +1,14 @@
 import { SwaggerRouter } from 'koa-swagger-decorator'
 import { UserController } from '@/controller/User'
+import { swaggerSpec } from '@/config/swagger'
 
 
 const router = new SwaggerRouter({
-  spec: {
-    info: {
-      title: 'Example API Server',
-      version: 'v1.0',
-    },
-  },
-  swaggerHtmlEndpoint: '/swagger-html',
-  swaggerJsonEndpoint: '/swagger-json',
+  spec: swaggerSpec,
 })
-router.prefix('/user')
 router.swagger()
 
 router
   .applyRoute(UserController)
 
-export {
-  router
-}
+module.exports = router

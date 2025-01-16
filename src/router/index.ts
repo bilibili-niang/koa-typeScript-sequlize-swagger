@@ -1,24 +1,16 @@
-import { SwaggerRouter } from 'koa-swagger-decorator'
-// import { SwaggerRouter } from 'koa-swagger-decorator-vvv'
-import { UserController } from '@/controller/User'
-import * as process from 'node:process'
+import fs from 'fs'
+import Router from 'koa-router'
 
+const indexRouter = new Router()
 
-const router = new SwaggerRouter({
-  spec: {
-    info: {
-      title: process.env.PROJECT_NAME,
-      version: 'v1.0',
-    },
-  },
-  swaggerHtmlEndpoint: '/swagger-html',
-  swaggerJsonEndpoint: '/swagger-json',
+// 获取当前目录下所有的文件，排除当前文件
+const files = fs.readdirSync(__dirname)
+  .filter(file => file !== 'index.ts')
+files.forEach(file => {
+  const routeModule = require(`./${file}`)
+  if (routeModule.routes) {
+    indexRouter.use(routeModule.routes())
+  }
 })
-router.swagger()
 
-router
-  .applyRoute(UserController)
-
-export {
-  router
-}
+export default indexRouter

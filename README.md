@@ -57,7 +57,7 @@ export default new UserController()
 ```ts
 import { body, query, request, summary, swaggerClass, swaggerProperty, tags } from 'koa-swagger-decorator'
 // 自定义校验,这里无需说明
-import { checkDesign, ctxBodySpecification } from '@/utils'
+import { checkDesign, ctxBody } from '@/utils'
 import { createUserType } from './type'
 
 @swaggerClass()
@@ -72,13 +72,13 @@ class UserController {
     // 获取目标参数
     checkDesign(ctx.request.body, paramType as any)
       .then(({ result: params }) => {
-        ctx.body = ctxBodySpecification({
+        ctx.body = ctxBody({
           success: true,
           msg: '开发测试中'
         })
       })
       .catch((err) => {
-        ctx.body = ctxBodySpecification({
+        ctx.body = ctxBody({
           success: false,
           msg: err.message
         })
@@ -257,7 +257,7 @@ export default new UserController()
 ```ts
 import { body, query, request, summary, swaggerClass, swaggerProperty, tags } from 'koa-swagger-decorator'
 // Custom validation, no need to explain here
-import { checkDesign, ctxBodySpecification } from '@/utils'
+import { checkDesign, ctxBody } from '@/utils'
 import { createUserType } from './type'
 
 @swaggerClass()
@@ -272,13 +272,13 @@ const paramType = new createUserType()
 // Get target parameters
 checkDesign(ctx.request.body, paramType as any)
 .then(({ result: params }) => {
-ctx.body = ctxBodySpecification({
+ctx.body = ctxBody({
 success: true,
 msg: 'Development and testing'
 })
 })
 .catch((err) => {
-ctx.body = ctxBodySpecification({
+ctx.body = ctxBody({
 success: false,
 msg: err.message
 })

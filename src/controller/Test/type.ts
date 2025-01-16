@@ -1,9 +1,17 @@
-import { body, query, request, summary, swaggerClass, swaggerProperty, tags } from 'koa-swagger-decorator'
+import { z } from 'koa-swagger-decorator'
+import { commonResponse } from '@/controller/common'
 
+/*
+* 构建请求参数
+* */
+export const TestLogReq = z.object({
+  info: z.string(),
+  warn: z.string()
+})
+/// 响应参数
+export const TestLogRes = commonResponse()
 
-@swaggerClass()
-export class writeToLogType {
-  @swaggerProperty({ type: 'string', required: false, description: '你想要写入info的字段' }) info: string = ''
-  @swaggerProperty({ type: 'string', required: false, description: '你想要写入warn的字段' }) warn: string = ''
-  // ...此处可以可以继续添加其他字段
-}
+/*
+* 请求体的type
+* */
+export type ITestLogReq = z.infer<typeof TestLogReq>

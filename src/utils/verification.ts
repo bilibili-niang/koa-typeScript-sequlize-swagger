@@ -1,4 +1,4 @@
-import { ctxBodySpecification } from '@/utils/ctxBodySpecification'
+import { ctxBody } from '@/utils'
 
 /*
 * 对post传参进行校验
@@ -10,7 +10,7 @@ const verificationPost = (ctx: any, cla: any) => {
 
     const { body = null } = ctx.request
     if (!body) {
-      ctx.body = ctxBodySpecification({
+      ctx.body = ctxBody({
         msg: 'body 不能为空'
       })
       reject()
