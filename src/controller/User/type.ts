@@ -27,3 +27,9 @@ export class createUserType {
     description: '密码'
   }) password: string = '123456'
 }
+
+
+@swaggerClass()
+export class deleteUserQueryType {
+  id: { type: 'number', required: true, description: '用户id', example: 1 }
+}

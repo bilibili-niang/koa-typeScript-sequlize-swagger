@@ -2,7 +2,10 @@ import { Column, DataType, Table, Model, BeforeCreate, Length } from 'sequelize-
 import { v4 as uuidv4 } from 'uuid' // 导入用于生成 UUID 的库
 
 
-@Table({ tableName: 'user' })
+@Table({ tableName: 'user',
+  paranoid: true
+  // 启用软删除
+  })
 export default class User extends Model<any> {
   @Column({
     type: DataType.UUID, // 使用 UUID 类型

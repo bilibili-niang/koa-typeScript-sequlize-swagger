@@ -32,6 +32,7 @@ class TestController {
       success: true,
       msg: '写入log成功'
     })
+    process.stdout.write('\x1Bc')
   }
 }
 

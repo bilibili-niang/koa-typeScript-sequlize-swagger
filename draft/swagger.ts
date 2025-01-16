@@ -3,3 +3,4 @@ import  * as koaSD from
 
 console.log('koaSD')
 console.log(koaSD)
+console.log(koaSD.query)

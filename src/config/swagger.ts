@@ -10,7 +10,9 @@ swaggerDoc.swagger({
   description: 'API DOC',
   version: '1.0'
 })
+
 // 查找对应目录下的routes文件夹
 swaggerDoc.mapDir(path.resolve(__dirname, '../controller/'))
+
 
 export default swaggerDoc
