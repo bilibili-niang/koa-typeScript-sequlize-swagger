@@ -1,35 +1,18 @@
-import {
-  body,
-  query,
-  request,
-  summary,
-  swaggerClass,
-  swaggerProperty,
-  tags
-} from
-    'koa-swagger-decorator'
+import { z } from 'koa-swagger-decorator'
 
-// 如果需要描述类本身（包括静态成员），则可以这样定义：
-export interface IUserTypeConstructor {
-  swaggerDocument?:object
-}
+const CreateUserReq = z.object({
+  name: z.string().nonempty(),
+  password: z.string().nonempty(),
+})
 
-@swaggerClass()
-export class createUserType {
-  @swaggerProperty({
-    type: 'string',
-    required: true,
-    description: '用户名'
-  }) userName: string = ''
-  @swaggerProperty({
-    type: 'string',
-    required: false,
-    description: '密码'
-  }) password: string = '123456'
-}
+const CreateUserRes = z.object({
+  id: z.string().nullable(),
+  message: z.string().nullable(),
+})
 
-
-@swaggerClass()
-export class deleteUserQueryType {
-  id: { type: 'number', required: true, description: '用户id', example: 1 }
+export type ICreateUserRes = z.infer<typeof CreateUserRes>;
+export type ICreateUserReq = z.infer<typeof CreateUserReq>;
+export {
+  CreateUserRes,
+  CreateUserReq
 }

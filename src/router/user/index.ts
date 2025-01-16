@@ -1,22 +1,23 @@
-/*
-* user router
-* */
-import Router from 'koa-router'
-import UserControllerEle from '@/controller/User'
-import { createUserType, } from '@/controller/User/type'
-import { createVerificationMiddleware } from '@/utils/factory'
+import { SwaggerRouter } from 'koa-swagger-decorator'
+import { UserController } from '@/controller/User'
 
-const router = new Router({
-  prefix: '/user',
+
+const router = new SwaggerRouter({
+  spec: {
+    info: {
+      title: 'Example API Server',
+      version: 'v1.0',
+    },
+  },
+  swaggerHtmlEndpoint: '/swagger-html',
+  swaggerJsonEndpoint: '/swagger-json',
 })
+router.prefix('/user')
+router.swagger()
 
-router.get('/userList', UserControllerEle.getUserList)
+router
+  .applyRoute(UserController)
 
-/*
-* 这里传入了 createUserType ,会通过 createVerificationMiddleware 构建一个对 ctx.request.body,ctx.request.query 的参数校验,如果不通过,这里会拦截
-* */
-router.post('/create', createVerificationMiddleware(createUserType), UserControllerEle.createUser)
-
-router.delete('/deleteUser', UserControllerEle.deleteUser)
-
-module.exports = router
+export {
+  router
+}

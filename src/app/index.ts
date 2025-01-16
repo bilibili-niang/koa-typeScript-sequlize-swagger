@@ -1,13 +1,13 @@
 // koa的挂载和静态资源开放等
 import koa from 'koa'
-import swaggerDoc from '@/config/swagger'
-import indexRouter from '@/router/index'
+import { router } from '@/router/index'
 import koaBody from 'koa-body'
 import path from 'path'
 import onError from 'koa-onerror'
 import staticFiles from 'koa-static'
 import { error, trace } from '@/config/log4j'
 import { ctxBodySpecification, validate } from '@/utils'
+
 
 const app = new koa()
 
@@ -19,15 +19,31 @@ onError(app, {
   },
   html: function (err, ctx) {
     ctx.status = 500
-    ctx.body = `<p>${err}</p>`
+    ctx.body = `<body>${err}</body>`
   }
 })
+
+
+/*app.context.onerror = (e)=>{
+  console.log(e)
+}*/
+
 
 // 跨域
 // @ts-ignore
 app
+  .on('error', async (err, ctx, next) => {
+    // ctx.set('Content-Type', 'text/json')
+    ctx.status = 500
+
+    ctx.body = ctxBodySpecification({ data: err.errors[0] })
+
+    console.log(err.errors[0])
+
+    error('响应错误,' + JSON.stringify(err))
+
+  })
   .use(async (ctx, next) => {
-    ctx.set('Content-Type', 'text/json')
     ctx.set('Access-Control-Allow-Origin', '*')
     ctx.set('Access-Control-Allow-Headers', 'Content-Type')
     ctx.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
@@ -40,16 +56,15 @@ app
       keepExtensions: true //保留拓展名
     }
   }))
-  .use(swaggerDoc.routes())
   //开放html模板的静态目录,你可以把打包后的html文件放到这个目录下
   .use(staticFiles(path.join(__dirname, '../static/views/'), { extensions: ['html'] }))
-  .use(indexRouter.routes())
+  .use(router.routes())
   // .use(validate)
   .on('error', async (err, ctx, next) => {
     ctx.status = 500
     ctx.body = err
-    console.log('错误的ctx---------------------------')
-    console.log(err)
+    // console.log('错误的ctx---------------------------')
+    // console.log(err)
     error('响应错误,' + JSON.stringify(err))
   })
   .use((ctx, next) => {

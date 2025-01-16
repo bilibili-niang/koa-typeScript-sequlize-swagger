@@ -1,10 +1,24 @@
-import Router from 'koa-router'
-import TextControllerEle from '@/controller/Test'
+import { SwaggerRouter } from 'koa-swagger-decorator'
+import { UserController } from '@/controller/User'
 
-const router = new Router({
-  prefix: '/test'
+
+const router = new SwaggerRouter({
+  spec: {
+    info: {
+      title: "Example API Server",
+      version: "v1.0",
+    },
+  },
+  swaggerHtmlEndpoint: '/swagger-html',
+  swaggerJsonEndpoint: '/swagger-json',
 })
+router.prefix('/test')
 
-router.post('/writeToLog',TextControllerEle.getTestLog)
+router.swagger()
 
-module.exports=router
+router
+  .applyRoute(UserController)
+
+export {
+  router
+}
