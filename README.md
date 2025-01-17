@@ -333,16 +333,20 @@ export default BaseModel
 ---
 ##### en
 
+
 #### Acknowledgments:
 
-[koa-swagger-decorator](https://github.com/Cody2333/koa-swagger-decorator), [sequelize-typescript](https://www.npmjs.com/package/sequelize-typescript), and others...
+- [koa-swagger-decorator](https://github.com/Cody2333/koa-swagger-decorator)
+- [sequelize-typescript](https://www.npmjs.com/package/sequelize-typescript)
+- And others...
 
-> [GitHub repository for koa-typeScript-sequlize-swagger](https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger). Feel free to give it a `Star`.
-
-> [NPM page for koa-typeScript-sequlize-swagger (though publishing it on NPM may not be necessary, as downloading it will place it in node_modules)](https://www.npmjs.com/package/koa-typescript-sequlize-swagger).
+> [GitHub Repository for koa-typeScript-sequlize-swagger](https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger), feel free to give it a `Star`
+>
+> [NPM Page for koa-typeScript-sequlize-swagger (Note: It might not be necessary to publish this on npm, as you can clone it directly into your `node_modules`)](https://www.npmjs.com/package/koa-typescript-sequlize-swagger)
 
 #### Introduction
-This is a backend template based on `Koa`, `TypeScript`, `log4js`, and `Sequelize`. I have developed several projects using this framework, incorporating essential functionalities typically found in backend systems. Drawing inspiration from other implementations of Koa within the Node.js ecosystem, I have configured a basic framework that meets my needs. Future updates will continue to enhance its capabilities.
+
+This is a backend template based on `koa`, `TypeScript (ts)`, `log4js`, and `Sequelize`. Having developed several projects myself, I referred to some standard functionalities that should be included in a backend project, as well as the use of `koa` under `Node.js`, to configure a basic framework. The framework is functional but will continue to evolve with future updates.
 
 #### Usage
 
@@ -352,14 +356,15 @@ git clone https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger.git
 
 #### Configuration and Usage of koa-swagger-decorator
 
-> To facilitate the maintenance of interfaces moving forward, you can view all routes directly through the web interface after starting the project. Alternatively, you can import these routes into `apiFox`. Please note that there are two versions available on NPM: `latest` and `next`, which differ significantly; this template utilizes the `next` version.
+> To facilitate the maintenance of subsequent interfaces, you can view all routes directly from the web interface after the project starts.
+Alternatively, you can import the routes into `apiFox`. Note that this project has two versions on npm: `latest` and `next`, which differ significantly. The template uses the `next` version.
 
-- The `koa-swagger-decorator` supports data validation. While some examples are included in this template, further usage details can be found in the [documentation](https://github.com/Cody2333/koa-swagger-decorator).
-- This template includes simple operations for creating, querying, and deleting records.
-- You need to use the `SwaggerRouter` instead of Koa's default routing mechanism. Below is an example configuration:
+- `koa-swagger-decorator` supports data validation; there are examples in the template, but for more detailed usage, please refer to the [documentation](https://github.com/Cody2333/koa-swagger-decorator).
+- The template includes simple examples of adding, querying, and deleting operations.
+- You need to use `SwaggerRouter` instead of Koa's router. Below is an example configuration:
 
-`D:\koa-typeScript-sequlize-swagger\src\router\user\index.ts`:
-```ts
+**File Path:** `D:\koa-typeScript-sequlize-swagger\src\router\user\index.ts`:
+```typescript
 import { SwaggerRouter } from 'koa-swagger-decorator';
 import { UserController } from '@/controller/User';
 import { swaggerSpec } from '@/config/swagger';
@@ -367,7 +372,6 @@ import { swaggerSpec } from '@/config/swagger';
 const router = new SwaggerRouter({
   spec: {
     info: {
-      // Configured in .env file
       title: process.env.PROJECT_NAME,
       version: 'v1.0',
     },
@@ -375,26 +379,236 @@ const router = new SwaggerRouter({
 });
 router.swagger();
 
-// Apply route instance
 router.applyRoute(UserController);
 
 module.exports = router;
 ```
-`D:\koa-typeScript-sequlize-swaggger\src\controller\User\index.ts`:
-```ts
+
+**File Path:** `D:\koa-typeScript-sequlize-swagger\src\controller\User\index.ts`:
+```typescript
 import { Context } from 'koa';
-import { body, middlewares, responses, routeConfig } from 'koa-swagger-decorator';
-import {
-  CreateUserReq,
-  CreateUserRes,
-  DeleteUserQuery,
-  DeleteUserRes,
-  IDeleteUserQuery,
-} from './type';
-import { ParsedArgs, z } from 'koa-swaggeer-decoraor';
-import { ICreateUserReq } from '@/controller/User/type';
-import User from '@/schema/user';
-import { ctxBody, deleteByIdMiddleware,paginationMiddleware}from'@/utils'; 
-// Additional code continues...
+// ... other imports ...
+
+class UserController {
+  @routeConfig({
+    method: 'post',
+    path: '/user/create',
+    summary: 'Create User',
+    tags: ['User'],
+  })
+  // ... decorators ...
+  async CreateUser(ctx: Context, args: ParsedArgs<ICreateUserReq>) {
+    await User.create(args.body)
+      .then((res: any) => {
+        ctx.body = ctxBody({
+          success: true,
+          code: 200,
+          msg: 'User created successfully',
+          data: res.dataValues
+        });
+      })
+      .catch(e => {
+        ctx.body = ctxBody({
+          success: false,
+          code: 500,
+          msg: 'Failed to create user',
+          data: e
+        });
+      });
+  }
+
+  // ... other methods ...
+}
+
+export { UserController };
 ```
 
+> In the source code of `koa-swagger-decorator`, you'll find that generating Swagger routes is related to API generation, where annotations and Controller implementations are bound by unique keys. However, much of the code is complex and may be hard to understand.
+
+> The template places all routes under the `router` subfolder and exports them via `router/index.ts`.
+
+**File Path:** `D:\koa-typeScript-sequlize-swagger\src\router\user\index.ts`:
+```typescript
+import fs from 'fs';
+import Router from 'koa-router';
+
+const indexRouter = new Router();
+
+const files = fs.readdirSync(__dirname)
+  .filter(file => file !== 'index.ts')
+  .forEach(file => {
+    const routeModule = require(`./${file}`);
+    if (routeModule.routes) {
+      indexRouter.use(routeModule.routes());
+    }
+  });
+
+export default indexRouter;
+```
+
+[Swagger Address After Project Start](http://localhost:3000/swagger-html)
+
+#### .env Configuration
+
+> Since different configurations are required for development and production environments, the project defaults to configurations for `local development` and `general development`.
+
+`.env.development`, `.env`, the commands to start them are defined in `package.json`:
+```json
+{
+  "scripts": {
+    "devLocal": "dotenv -e .env.development nodemon ./src/main.ts",
+    "dev": "dotenv -e .env nodemon ./src/main.ts",
+    "commit": "git-cz"
+  }
+}
+```
+
+Default configuration:
+```env
+# Title configuration for Swagger
+PROJECT_NAME=Backend API, Local Testing Environment
+# Port configuration for the project
+PORT=3000
+# Database configuration
+DATABASE_NAME=mydb
+USER_NAME=root
+DATABASE_PASSWORD=123456
+DATABASE_PORT=3306
+DATABASE_HOST=127.0.0.1
+```
+
+#### log4js
+
+> [log4js GitHub](https://github.com/log4js-node/log4js-node)
+
+> The project supports logging output to files.
+
+Supported log levels include:
+```typescript
+export {
+  trace,
+  debug,
+  info,
+  warn,
+  error,
+  fatal
+};
+```
+
+For specific configurations, see `D:\koa-typeScript-sequlize-swagger\src\config\log4j.ts`. Upon starting the project, it will create a log directory (`D:\koa-typeScript-sequlize-swagger\src\logs`) and corresponding log files.
+
+#### Sequelize Database Connection
+
+> [Sequelize TypeScript GitHub](https://github.com/sequelize/sequelize-typescript)
+
+> Many libraries support database connections, and this is just one of them.
+
+> Creating a database connection and initializing Models:
+
+**File Path:** `D:\koa-typeScript-sequlize-swagger\src\config\db.ts`
+```typescript
+import { Sequelize } from 'sequelize-typescript';
+import User from '@/schema/user';
+import * as process from 'node:process';
+
+const seq = new Sequelize(process.env.DATABASE_NAME, process.env.USER_NAME, process.env.DATABASE_PASSWORD, {
+  dialect: 'mysql',
+  port: Number(process.env.DATABASE_PORT),
+  logging: false,
+  models: [User]
+});
+
+(async () => {
+  try {
+    await seq.sync();
+    console.log('Database & tables created!');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+})();
+
+export default seq;
+```
+
+> Defining a Table:
+
+**File Path:** `D:\koa-typeScript-sequlize-swagger\src\schema\user\index.ts`:
+```typescript
+import { Column, DataType, Table, Length } from 'sequelize-typescript';
+import BaseModel from '@/schema/baseModal';
+
+@Table({
+  tableName: 'user',
+  paranoid: true // Enable soft delete
+})
+export default class User extends BaseModel {
+  @Length({
+    min: 2,
+    max: 10,
+    msg: 'Username must be between 2 to 10 characters'
+  })
+  @Column({
+    type: DataType.STRING,
+    comment: 'User name'
+  })
+  declare userName: string;
+
+  @Column({
+    type: DataType.STRING,
+    comment: 'Password'
+  })
+  declare password: string;
+}
+```
+
+**BaseModel File:**
+```typescript
+import { v4 as uuidv4 } from 'uuid';
+import {
+  Column,
+  DataType,
+  Model,
+  PrimaryKey,
+  CreatedAt,
+  UpdatedAt,
+  DeletedAt
+} from 'sequelize-typescript';
+
+class BaseModel extends Model {
+  @PrimaryKey
+  @Column({
+    type: DataType.UUID, // Use UUID type
+    defaultValue: () => uuidv4().replace(/-/g, ''),
+    primaryKey: true, // Set as primary key
+    allowNull: false // Not null
+  })
+  declare id: string;
+
+  @CreatedAt
+  @Column({
+    type: DataType.DATE,
+    comment: 'Creation time'
+  })
+  declare createdAt: Date | null;
+
+  @UpdatedAt
+  @Column({
+    type: DataType.DATE,
+    comment: 'Update time'
+  })
+  declare updatedAt: Date | null;
+
+  @DeletedAt
+  @Column({
+    type: DataType.DATE,
+    comment: 'Deletion time'
+  })
+  declare deletedAt: Date | null;
+}
+
+export default BaseModel;
+```
+
+---
+
+Future updates will be made, but documentation updates may lag behind.
