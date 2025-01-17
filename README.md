@@ -3,17 +3,6 @@
 ---
 ##### zh
 
-# koa-typescript-sequlize-swagger
-
-## Description
-Node.js backend template using Koa, TypeScript, Sequelize, and Swagger.
-
-## Installation
-You can install this package via npm:
-
-```bash
-npm install koa-typescript-sequlize-swagger
-
 #### 鸣谢:
 
 [koa-swagger-decorator](https://github.com/Cody2333/koa-swagger-decorator),[sequelize-typescript](https://www.npmjs.com/package/sequelize-typescript)等等...
