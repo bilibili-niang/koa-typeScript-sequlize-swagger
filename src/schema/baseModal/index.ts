@@ -6,8 +6,7 @@ import {
   PrimaryKey,
   CreatedAt,
   UpdatedAt,
-  DeletedAt,
-  BeforeCreate
+  DeletedAt
 } from 'sequelize-typescript'
 
 class BaseModel extends Model {

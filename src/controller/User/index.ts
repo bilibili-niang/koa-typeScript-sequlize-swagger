@@ -8,9 +8,9 @@ import {
   IDeleteUserQuery,
 } from './type'
 import { ParsedArgs, z } from 'koa-swagger-decorator'
-import { ICreateUserReq, ICreateUserRes } from '@/controller/User/type'
+import { ICreateUserReq } from '@/controller/User/type'
 import User from '@/schema/user'
-import { checkDesign, ctxBody, deleteByIdMiddleware, paginationMiddleware } from '@/utils'
+import { ctxBody, deleteByIdMiddleware, paginationMiddleware } from '@/utils'
 import { paginationQuery } from '@/controller/common/queryType'
 
 class UserController {
@@ -49,7 +49,6 @@ class UserController {
       })
   }
 
-
   @routeConfig({
     method: 'get',
     path: '/user/list',
@@ -77,7 +76,6 @@ class UserController {
   async deleteUser(ctx: Context, args: ParsedArgs<IDeleteUserQuery>) {
     await deleteByIdMiddleware(ctx, User, '用户')
   }
-
 }
 
 export { UserController }

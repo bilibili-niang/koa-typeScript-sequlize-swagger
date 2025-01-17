@@ -4,7 +4,7 @@
   "main": "index.js",
   "repository": "https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger.git",
   "scripts": {
-    "devForLocal": "dotenv -e .env.development nodemon ./src/main.ts",
+    "devLocal": "dotenv -e .env.development nodemon ./src/main.ts",
     "dev": "dotenv -e .env nodemon ./src/main.ts",
     "commit": "git-cz"
   },
