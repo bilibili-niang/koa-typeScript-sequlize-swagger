@@ -1,5 +1,5 @@
 [中文](#zh),[English](#en)
-
+[![npm version](https://badge.fury.io/js/koa-typescript-sequlize-swagger)](https://www.npmjs.com/package/koa-typescript-sequlize-swagger)
 
 ---
 ##### zh
