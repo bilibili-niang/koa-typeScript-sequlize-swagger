@@ -333,3 +333,68 @@ export default BaseModel
 ---
 ##### en
 
+#### Acknowledgments:
+
+[koa-swagger-decorator](https://github.com/Cody2333/koa-swagger-decorator), [sequelize-typescript](https://www.npmjs.com/package/sequelize-typescript), and others...
+
+> [GitHub repository for koa-typeScript-sequlize-swagger](https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger). Feel free to give it a `Star`.
+
+> [NPM page for koa-typeScript-sequlize-swagger (though publishing it on NPM may not be necessary, as downloading it will place it in node_modules)](https://www.npmjs.com/package/koa-typescript-sequlize-swagger).
+
+#### Introduction
+This is a backend template based on `Koa`, `TypeScript`, `log4js`, and `Sequelize`. I have developed several projects using this framework, incorporating essential functionalities typically found in backend systems. Drawing inspiration from other implementations of Koa within the Node.js ecosystem, I have configured a basic framework that meets my needs. Future updates will continue to enhance its capabilities.
+
+#### Usage
+
+```shell
+git clone https://github.com/bilibili-niang/koa-typeScript-sequlize-swagger.git
+```
+
+#### Configuration and Usage of koa-swagger-decorator
+
+> To facilitate the maintenance of interfaces moving forward, you can view all routes directly through the web interface after starting the project. Alternatively, you can import these routes into `apiFox`. Please note that there are two versions available on NPM: `latest` and `next`, which differ significantly; this template utilizes the `next` version.
+
+- The `koa-swagger-decorator` supports data validation. While some examples are included in this template, further usage details can be found in the [documentation](https://github.com/Cody2333/koa-swagger-decorator).
+- This template includes simple operations for creating, querying, and deleting records.
+- You need to use the `SwaggerRouter` instead of Koa's default routing mechanism. Below is an example configuration:
+
+`D:\koa-typeScript-sequlize-swagger\src\router\user\index.ts`:
+```ts
+import { SwaggerRouter } from 'koa-swagger-decorator';
+import { UserController } from '@/controller/User';
+import { swaggerSpec } from '@/config/swagger';
+
+const router = new SwaggerRouter({
+  spec: {
+    info: {
+      // Configured in .env file
+      title: process.env.PROJECT_NAME,
+      version: 'v1.0',
+    },
+  }
+});
+router.swagger();
+
+// Apply route instance
+router.applyRoute(UserController);
+
+module.exports = router;
+```
+`D:\koa-typeScript-sequlize-swaggger\src\controller\User\index.ts`:
+```ts
+import { Context } from 'koa';
+import { body, middlewares, responses, routeConfig } from 'koa-swagger-decorator';
+import {
+  CreateUserReq,
+  CreateUserRes,
+  DeleteUserQuery,
+  DeleteUserRes,
+  IDeleteUserQuery,
+} from './type';
+import { ParsedArgs, z } from 'koa-swaggeer-decoraor';
+import { ICreateUserReq } from '@/controller/User/type';
+import User from '@/schema/user';
+import { ctxBody, deleteByIdMiddleware,paginationMiddleware}from'@/utils'; 
+// Additional code continues...
+```
+
