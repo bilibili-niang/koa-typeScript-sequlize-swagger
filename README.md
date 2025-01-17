@@ -1,9 +1,18 @@
 [中文](#zh),[English](#en)
-[![npm version](https://badge.fury.io/js/koa-typescript-sequlize-swagger)](https://www.npmjs.com/package/koa-typescript-sequlize-swagger)
 
 ---
 ##### zh
 
+# koa-typescript-sequlize-swagger
+
+## Description
+Node.js backend template using Koa, TypeScript, Sequelize, and Swagger.
+
+## Installation
+You can install this package via npm:
+
+```bash
+npm install koa-typescript-sequlize-swagger
 
 #### 鸣谢:
 
